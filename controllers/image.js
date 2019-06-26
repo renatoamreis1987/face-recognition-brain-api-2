@@ -9,6 +9,7 @@ const handleApiCall = (req, res) => {
   app.models
     .predict("e466caa0619f444ab97497640cefc4dc", req.body.input)
     .then(data => {
+      console.log(data)
       console.log(data.outputs[0].data.regions[0].data.concepts[0].name)
       console.log(data.outputs[0].data.regions[1].data.concepts[0].name)
       res.json(data);
