@@ -8,4 +8,4 @@ services:
     command: npm start
     working_dir: /usr/src/smart-brain-api
     ports: 
-      - "3000"
+      - "3000:3000"
