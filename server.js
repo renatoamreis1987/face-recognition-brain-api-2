@@ -8,10 +8,10 @@ const knex = require('knex')({
   connection: {
   //  connectionString : process.env.DATABASE_URL,
   //  ssl: true
-  host: '127.0.0.1',
-  user: 'postgres',
-  password: 'cmMadrid',
-  database: 'smart-brain'
+  host: process.env.POSTGRES_HOST,
+  user: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD,
+  database: process.env.POSTGRES_DB
   }
 });
 
