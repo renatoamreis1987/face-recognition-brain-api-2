@@ -2,7 +2,7 @@ const Clarifai = require("clarifai"); //This is related with the API
 
 //This is related with the IA App, face detection. Is the API key to access
 const app = new Clarifai.App({
-  apiKey: "907a338392f64c709e04bbadff9ce445"
+  apiKey: "41c0cf31de934a3ba8e43e15e766111b"
 });
 
 const handleApiCall = (req, res) => {
