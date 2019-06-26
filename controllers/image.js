@@ -10,8 +10,8 @@ const handleApiCall = (req, res) => {
     .predict("e466caa0619f444ab97497640cefc4dc", req.body.input)
     .then(data => {
       console.log(data)
-      console.log(data.outputs[0].data.regions[0].data.concepts[0].name)
-      console.log(data.outputs[0].data.regions[1].data.concepts[0].name)
+      console.log("Holla", data.outputs[0].data.regions[0].data.concepts[0].name)
+      console.log("Hwllllloo", data.outputs[0].data.regions[1].data.concepts[0].name)
       res.json(data);
     })
     .catch(err => res.status(400).json('Unable to work with API'))
