@@ -9,7 +9,7 @@ services:
     command: npm start
     working_dir: /usr/src/smart-brain-api
     environment: 
-      POSTGRES_USER: Renato
+      POSTGRES_USER: renatoamreis
       POSTGRES_PASSWORD: secret
       POSTGRES_DB: smart-brain-docker
       POSTGRES_HOST: postgres
@@ -20,6 +20,11 @@ services:
 
   # Postgres - We don't need container_name as it will take image name
   postgres:
+    environment: 
+      POSTGRES_USER: renatoamreis
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: smart-brain-docker
+      POSTGRES_HOST: postgres
     image: postgres
     ports:
       - "5432:5432"
