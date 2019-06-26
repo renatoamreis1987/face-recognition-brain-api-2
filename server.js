@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt-nodejs")
 const cors = require("cors")
+const morgan = require("morgan")
 const knex = require('knex')({
   client: 'pg',
   connection: {
@@ -21,6 +22,7 @@ const image = require('./controllers/image')
 
 const app = express();
 
+app.use(morgan('combine'));
 app.use(bodyParser.json());
 app.use(cors())
 
