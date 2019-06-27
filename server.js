@@ -33,6 +33,8 @@ app.post("/register", (req, res) => { register.handleRegister(req, res, knex, bc
  
 app.get("/profile/:id", (req, res) => { profile.handleProfile(req, res, knex)});
 
+app.post("/profile/:id", (req, res) => { profile.handleProfileUpdate(req, res, knex) })
+
 app.put("/image", (req, res) => { image.handleImage(req, res, knex) });
 
 // This is to handle the API
