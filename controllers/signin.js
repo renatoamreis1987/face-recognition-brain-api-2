@@ -64,11 +64,11 @@ const signinAuthentication = (knex, bcrypt) => (req, res) => {
   const { authorization } = req.headers; //If the user already has the authorization set in the headers, they should be able to login
   return authorization
     ? getAuthTokenId(req, res) //If the user has authorization -> grab the token and allow to login
-    : handleSignin(knex, bcrypt, req, res) //If there's not auth, to proceed with the login
+    : handleSignin(knex, bcrypt, req, res) //If there's not auth, to proceed with the signin process
         .then(data => {
           //HERE WE'LL GET THE USER FROM USER[0] ^^^ ABOVE ^^^
           return data.id && data.email
-            ? createSessions(data)
+            ? createSessions(data) //We will create a Session
             : Promise.reject(data);
         })
         .then(session => res.json(session))

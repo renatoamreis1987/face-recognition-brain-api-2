@@ -9,14 +9,11 @@ const requireAuth = (req, res, next) => {
     if (err || !reply) {
       return res.status(401).json("Unauthorized");
     }
-    console.log('You shall pass')
+    console.log("You shall pass");
     return next();
   });
 };
 
-
-//This is just to check the user have
-
 module.exports = {
-    requireAuth: requireAuth
-}
+  requireAuth: requireAuth
+};

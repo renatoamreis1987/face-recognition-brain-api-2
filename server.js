@@ -32,6 +32,8 @@ app.post("/register", (req, res) => {
   register.handleRegister(req, res, knex, bcrypt);
 });
 
+//auth.requireAuth is a middleware authentication, to avoid that anyone without access can access!
+// They must have a token to access
 app.get("/profile/:id", auth.requireAuth, (req, res) => {
   profile.handleProfile(req, res, knex);
 });
