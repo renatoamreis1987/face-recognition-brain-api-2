@@ -1,3 +1,9 @@
+const jwt = require('jsonwebtoken');
+const redis = require('redis')
+
+//Setup Redis
+const redisClient = redis.createClient(process.env.REDIS_URI);
+
 const handleSignin = (knex, bcrypt, req, res) => {
   const { email, password } = req.body;
   //Bellow the if statement is validation on server side
@@ -27,13 +33,29 @@ const handleSignin = (knex, bcrypt, req, res) => {
 const getAuthTokenId = () => {
   console.log("auth");
 };
+
+const signToken = (email) => {
+  const jwtPayload = { email }
+  return jwt.sign(jwtPayload, 'JWT_SECRET', { expiresIn: '2 days' });
+}
+
+const createSessions = (user) => {
+  //JWT Token, return user
+  const { email, id } = user;
+  const token = signToken(email)
+  return { success:'true', userId: id, token }
+}
+
 const signinAuthentication = (knex, bcrypt) => (req, res) => {
   const { authorization } = req.headers; //If the user already has the authorization set in the headers, they should be able to login
   return authorization
     ? getAuthTokenId() //If the user has authorization -> grab the token and allow to login
     : handleSignin(knex, bcrypt, req, res) //If there's not auth, to proceed with the login
-        .then(data => res.json(data))
-        .catch(err => res.status(400).json(err))
+        .then(data => { //HERE WE'LL GET THE USER FROM USER[0] ^^^ ABOVE ^^^
+          return data.id && data.email ? createSessions(data) : Promise.reject(data)
+        })
+        .then(session => res.json(session)) 
+        .catch(err => res.status(400).json(err)) //IF THERE IS ANY ERROR WE'LL GET IT FROM THE Promise.reject above!! ^^^
 };
 
 module.exports = {
