@@ -30,8 +30,14 @@ const handleSignin = (knex, bcrypt, req, res) => {
     .catch(err => Promise.reject("Wrong Credentials"));
 };
 
-const getAuthTokenId = () => {
-  console.log("auth");
+const getAuthTokenId = (req, res) => {
+  const { authorization } = req.headers
+  return redisClient.get(authorization, (err, reply) => {
+    if (err || !reply) {
+      return res.status(400).json('Unauthorized')
+    } 
+    return res.json({id: reply})
+  })
 };
 
 const signToken = email => {
@@ -57,7 +63,7 @@ const createSessions = user => {
 const signinAuthentication = (knex, bcrypt) => (req, res) => {
   const { authorization } = req.headers; //If the user already has the authorization set in the headers, they should be able to login
   return authorization
-    ? getAuthTokenId() //If the user has authorization -> grab the token and allow to login
+    ? getAuthTokenId(req, res) //If the user has authorization -> grab the token and allow to login
     : handleSignin(knex, bcrypt, req, res) //If there's not auth, to proceed with the login
         .then(data => {
           //HERE WE'LL GET THE USER FROM USER[0] ^^^ ABOVE ^^^
