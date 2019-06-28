@@ -27,7 +27,7 @@ app.get("/", (req, res) => {
 
 //IMPORTANT: Bellow with signin and also inside of signin.js is written in a different
 //way, to have the code in a cleaner way. Just to Compare and understand! 
-app.post("/signin", signin.handleSignin(knex, bcrypt));
+app.post("/signin", signin.signinAuthentication(knex, bcrypt));
 
 app.post("/register", (req, res) => { register.handleRegister(req, res, knex, bcrypt) });
  
