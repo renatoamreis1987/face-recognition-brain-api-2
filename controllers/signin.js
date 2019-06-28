@@ -1,5 +1,5 @@
-const jwt = require('jsonwebtoken');
-const redis = require('redis')
+const jwt = require("jsonwebtoken");
+const redis = require("redis");
 
 //Setup Redis
 const redisClient = redis.createClient(process.env.REDIS_URI);
@@ -34,34 +34,39 @@ const getAuthTokenId = () => {
   console.log("auth");
 };
 
-const signToken = (email) => {
-  const jwtPayload = { email }
-  return jwt.sign(jwtPayload, 'JWT_SECRET', { expiresIn: '2 days' });
-}
+const signToken = email => {
+  const jwtPayload = { email };
+  return jwt.sign(jwtPayload, "JWT_SECRET", { expiresIn: "2 days" });
+};
 
 const setToken = (key, value) => {
-  return Promise.resolve(redisClient.set(key, value))
-}
+  return Promise.resolve(redisClient.set(key, value));
+};
 
-const createSessions = (user) => {
+const createSessions = user => {
   //JWT Token, return user
   const { email, id } = user;
-  const token = signToken(email)
+  const token = signToken(email);
   return setToken(token, id)
-    .then(() => ({ success:'true', userId: id, token }))
-    .catch(console.log)
-}
+    .then(() => {
+      return { success: "true", userId: id, token };
+    })
+    .catch(console.log);
+};
 
 const signinAuthentication = (knex, bcrypt) => (req, res) => {
   const { authorization } = req.headers; //If the user already has the authorization set in the headers, they should be able to login
   return authorization
     ? getAuthTokenId() //If the user has authorization -> grab the token and allow to login
     : handleSignin(knex, bcrypt, req, res) //If there's not auth, to proceed with the login
-        .then(data => { //HERE WE'LL GET THE USER FROM USER[0] ^^^ ABOVE ^^^
-          return data.id && data.email ? createSessions(data) : Promise.reject(data)
+        .then(data => {
+          //HERE WE'LL GET THE USER FROM USER[0] ^^^ ABOVE ^^^
+          return data.id && data.email
+            ? createSessions(data)
+            : Promise.reject(data);
         })
-        .then(session => res.json(session)) 
-        .catch(err => res.status(400).json(err)) //IF THERE IS ANY ERROR WE'LL GET IT FROM THE Promise.reject above!! ^^^
+        .then(session => res.json(session))
+        .catch(err => res.status(400).json(err)); //IF THERE IS ANY ERROR WE'LL GET IT FROM THE Promise.reject above!! ^^^
 };
 
 module.exports = {
